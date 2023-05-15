@@ -22,6 +22,7 @@ jobs:
           cd build/
           cmake ..
           make
+          cp test ../
 
       - uses: marvinpinto/action-automatic-releases@latest
         with:
@@ -30,4 +31,4 @@ jobs:
           prerelease: false
           files: |
             README.md
-            build/test
+            test
