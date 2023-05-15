@@ -28,6 +28,4 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           draft: true
           prerelease: false
-          files: |
-            README.md
-            build/test
+          files: README.md
