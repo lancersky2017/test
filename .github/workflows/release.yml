@@ -18,32 +18,16 @@ jobs:
 
       - id: release-asset
         run: |
-          RELEASE_VERSION=${GITHUB_REF##*/}
-          echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
-
-          pip3 install pip west
-          west init -m https://github.com/lancersky2017/gl-nrf-sdk --mr v2.2.0-glinet gl-nrf-sdk
-          cd gl-nrf-sdk/
-          west update
-          west zephyr-export
-
-          nrf/scripts/bootstrap.sh
-          export ZEPHYR_TOOLCHAIN_VARIANT=gnuarmemb
-          export GNUARMEMB_TOOLCHAIN_PATH=$PWD/gcc-arm-none-eabi-9-2019-q4-major
-
-          cd glinet/gl-dev-board-over-thread
-          west build -b gl_thread_dev_board
-
-          cd -
-          tree -L 3
+          mkdir build
+          cd build/
+          cmake ..
+          make
 
       - uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           draft: true
           prerelease: false
-          automatic_release_tag: ${{ env.RELEASE_VERSION }}
           files: |
             README.md
-            glinet/gl-dev-board-over-thread/build/zephyr/app_update.bin
-            glinet/gl-dev-board-over-thread/build/zephyr/zephyr.bin
+            build/test
